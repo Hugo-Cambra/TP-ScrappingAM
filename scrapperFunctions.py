@@ -67,16 +67,19 @@ def get_info(url_id):
     video_url = "https://www.youtube.com/watch?v="+url_id
     youtube_url = youtubeURL(video_url)
     data = youtube_url[0]
-    soup = youtube_url[1]
-    
     result = {}
-    
-    result["title"] = get_title(data)
-    result["author"] = get_author(data)
-    result["like_nbr"] = get_likes(soup)
-    result["description"] = get_description(data)
-    result["excpetionnal_link"] = get_excpetionnal_link(result['description'])
-    result["video_id"] = get_video_id(data)
-    result["commentaries"] = get_commentaries(data)
+
+    try:
+        soup = youtube_url[1]
+        
+        result["title"] = get_title(data)
+        result["author"] = get_author(data)
+        result["like_nbr"] = get_likes(soup)
+        result["description"] = get_description(data)
+        result["excpetionnal_link"] = get_excpetionnal_link(result['description'])
+        result["video_id"] = get_video_id(data)
+        result["commentaries"] = get_commentaries(data)
+    except:
+        pass
     
     return result
