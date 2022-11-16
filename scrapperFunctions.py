@@ -4,6 +4,7 @@ import re
 import json
 import argparse
 
+# Get data and soup of the video
 def youtubeURL(video_url):
     response = requests.get(video_url)
     soup = bs(response.text, 'html.parser')
@@ -17,12 +18,15 @@ def youtubeURL(video_url):
     
     return res
 
+# Get the title of the video
 def get_title(data):
     return data['videoDetails']['title']
 
+# Get the author of the video
 def get_author(data):
     return data['videoDetails']['author']
 
+# Get the likes of the video
 def get_likes(soup):
     data2 = re.search(r"var ytInitialData = ({.*?});", soup.prettify()).group(1)
     data2 = json.loads(data2)
@@ -34,22 +38,28 @@ def get_likes(soup):
     
     return int(likes.replace('\u202f',''))
 
+# Get the description of the video
 def get_description(data):
     return data['videoDetails']['shortDescription']
 
+# Get the exceptionnal links of the video
 def get_excpetionnal_link(description):
     return re.findall(r'(https?://\S+)', description)
 
+# Get the video id
 def get_video_id(data):
     return data['videoDetails']['videoId']
 
+# Get the comments of the video
 def get_commentaries(data):
     return "no commentarie method"
 
+# Generate the output file with all the results
 def generate_output(res,output_arg):
     with open(output_arg, "w") as outfile:
         json.dump(res, outfile, indent = 4, ensure_ascii=False)
 
+# Get the inputs arguments of the terminal
 def get_inputs_arguments():
     input_command = argparse.ArgumentParser()
     input_command.add_argument('--input', help='JSON file containing all the input URLs', required=True)
@@ -62,7 +72,8 @@ def get_inputs_arguments():
     res.append(arguments_dict['output'])
     
     return res
-    
+
+# Get all the info of the video
 def get_info(url_id):
     video_url = "https://www.youtube.com/watch?v="+url_id
     youtube_url = youtubeURL(video_url)
